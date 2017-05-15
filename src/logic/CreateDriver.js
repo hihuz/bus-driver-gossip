@@ -1,7 +1,7 @@
 const CreateDriver = ({ id = 0, route = [0] }) => ({
   id,
   route,
-  stop: "start",
+  stop: route[0],
   positionIndex: 0,
   gossips: [id],
   move() {
@@ -20,7 +20,7 @@ const CreateDriver = ({ id = 0, route = [0] }) => ({
     this.gossips = nextGossips;
   },
   talk() {
-    return this.gossips;
+    return { gossips: this.gossips, stop: this.stop };
   }
 });
 

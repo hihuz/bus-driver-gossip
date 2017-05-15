@@ -1,4 +1,5 @@
 /** *
+*
 * Driver
 *   Props:
 *    id (Driver Id based off initial input),
@@ -11,6 +12,7 @@
 *     move (get to next stop in the route),
 *     listen (receive gossips and add them to its list),
 *     talk (return currently known gossips)
+*
 ***/
 import CreateDriver from "../CreateDriver";
 
@@ -120,11 +122,13 @@ describe("CreateDriver: listen", () => {
 });
 
 describe("CreateDriver: talk", () => {
-  test("should return the known gossips", () => {
+  test("should return the known gossips and the current position", () => {
     const Bob = CreateDriver({});
     const knownGossips = [1, 3, 5, 7];
+    const stop = 3;
     Bob.gossips = knownGossips;
-    const expected = knownGossips;
+    Bob.stop = stop;
+    const expected = { gossips: knownGossips, stop };
     const actual = Bob.talk();
     expect(actual).toEqual(expected);
   });
