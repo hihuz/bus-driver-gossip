@@ -1,7 +1,25 @@
-export const CreateDriver = ({ id = 0, route = [], position = 0, gossips = [0] }) => ({
+export const CreateDriver = ({ id = 0, route = [0] }) => ({
   id,
   route,
-  position,
-  gossips,
-  move() {}
+  stop: "start",
+  positionIndex: 0,
+  gossips: [id],
+  move() {
+    const curIndex = this.positionIndex;
+    const nextIndex = curIndex + 1 >= route.length ? 0 : curIndex + 1;
+    this.positionIndex = nextIndex;
+    this.stop = route[nextIndex];
+  },
+  listen(gossips = []) {
+    const nextGossips = [...this.gossips];
+    gossips.forEach(gossip => {
+      if (nextGossips.indexOf(gossip) === -1) {
+        nextGossips.push(gossip);
+      }
+    });
+    this.gossips = nextGossips;
+  },
+  talk() {
+    return this.gossips;
+  }
 });
