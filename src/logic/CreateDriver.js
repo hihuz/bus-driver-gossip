@@ -1,4 +1,4 @@
-export const CreateDriver = ({ id = 0, route = [0] }) => ({
+const CreateDriver = ({ id = 0, route = [0] }) => ({
   id,
   route,
   stop: "start",
@@ -23,3 +23,5 @@ export const CreateDriver = ({ id = 0, route = [0] }) => ({
     return this.gossips;
   }
 });
+
+export default CreateDriver;

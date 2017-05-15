@@ -1,8 +1,18 @@
 /** *
-* - Driver (id, route, stop, positionIndex, gossips => props / move, listen, talk => method)
-* - Playground (drivers, count, remaining, exchange, gossips, _lowest_ => prop / tick, run => method)
+* Driver
+*   Props:
+*    id (Driver Id based off initial input),
+*    route (Driver route based off initial input),
+*    stop (current position of the driver as a stop),
+*    positionIndex (current position of the driver as index of its route),
+*    gossips (currently known gossips)
+*
+*   Methods:
+*     move (get to next stop in the route),
+*     listen (receive gossips and add them to its list),
+*     talk (return currently known gossips)
 ***/
-import { CreateDriver } from "../index";
+import CreateDriver from "../CreateDriver";
 
 describe("CreateDriver", () => {
   test("should return an object with route/stop/positionIndex/gossips default props", () => {
