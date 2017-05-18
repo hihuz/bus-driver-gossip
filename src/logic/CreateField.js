@@ -1,6 +1,3 @@
-// This was extracted prematurely, as I was full green.
-// However I already know that I will need this for tick / exchange as well
-// Update tests to match this
 export const gatherGossips = (drivers = []) => {
   const length = drivers.reduce((acc, cur) => Math.max(acc, cur.route.length), 0);
   const gossips = new Array(length)
@@ -29,3 +26,4 @@ const CreateField = ({ drivers = [] }) => {
 };
 
 export default CreateField;
+

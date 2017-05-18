@@ -92,4 +92,29 @@ describe("CreateField: exchange", () => {
     const actual = Field.gossips;
     expect(actual).toEqual(expected);
   });
+
+  test("should gather the gossips at each stop 2", () => {
+    const input = [[1, 1, 2], [1, 3, 1, 2], [1, 0, 2], [0, 1, 2], [0, 2, 1]];
+    const drivers = CreateDrivers(input);
+    const Field = CreateField({ drivers });
+    Field.gossips = [];
+    Field.exchange();
+    const expected = [[3, 4], [0, 1, 2], [], []];
+    const actual = Field.gossips;
+    expect(actual).toEqual(expected);
+  });
+
+  test("should gather the gossips at each stop 3", () => {
+    const input = [[1, 3, 2], [1, 3, 1, 2], [0, 2, 2], [0, 1, 2], [0, 2, 1]];
+    const drivers = CreateDrivers(input);
+    drivers.forEach(driver => {
+      driver.move();
+    });
+    const Field = CreateField({ drivers });
+    Field.gossips = [];
+    Field.exchange();
+    const expected = [[], [3], [2, 4], [0, 1]];
+    const actual = Field.gossips;
+    expect(actual).toEqual(expected);
+  });
 });

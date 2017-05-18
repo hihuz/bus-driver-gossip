@@ -18,9 +18,6 @@ const CreateDriver = ({ id = 0, route = [0] }) => ({
       }
     });
     this.gossips = nextGossips;
-  },
-  talk() {
-    return { gossips: this.gossips, stop: this.stop };
   }
 });
 
