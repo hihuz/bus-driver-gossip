@@ -19,6 +19,11 @@ const CreateField = ({ drivers = [] }) => {
     gossips,
     exchange() {
       this.gossips = gatherGossips(this.drivers);
+      this.drivers.forEach(driver => {
+        const curStop = driver.stop;
+        const gossips = this.gossips[curStop];
+        driver.listen(gossips);
+      });
     },
     tick() {},
     run() {}
@@ -26,4 +31,3 @@ const CreateField = ({ drivers = [] }) => {
 };
 
 export default CreateField;
-

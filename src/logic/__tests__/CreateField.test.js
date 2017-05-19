@@ -117,4 +117,30 @@ describe("CreateField: exchange", () => {
     const actual = Field.gossips;
     expect(actual).toEqual(expected);
   });
+
+  test("should call listen on each driver", () => {
+    const listenMock = jest.fn();
+    const input = [[1, 3, 2], [1, 3, 1, 2], [0, 2, 2], [0, 1, 2], [0, 2, 1]];
+    const drivers = CreateDrivers(input);
+    drivers.forEach(driver => {
+      driver.listen = listenMock;
+    });
+    const Field = CreateField({ drivers });
+    Field.exchange();
+    const actual = listenMock.mock.calls.length;
+    const expected = input.length;
+    expect(actual).toEqual(expected);
+  });
+
+  test("should pass as argument to listen the gossips at the drivers' stop", () => {
+    const input = [[0, 1, 2], [2, 1, 0]];
+    const drivers = CreateDrivers(input);
+    drivers.forEach(driver => {
+      driver.move();
+    });
+    const Field = CreateField({ drivers });
+    Field.exchange();
+    expect(drivers[0].gossips).toEqual([0, 1]);
+    expect(drivers[1].gossips).toEqual([1, 0]);
+  });
 });
