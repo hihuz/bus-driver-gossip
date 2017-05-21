@@ -39,26 +39,6 @@ describe("CreateField", () => {
     expect(actual).toEqual(expected);
   });
 
-  test("should init gossips based off passed input 1", () => {
-    const input = [[0, 1, 2], [0, 3, 1, 2]];
-    const drivers = CreateDrivers(input);
-    const Field = CreateField({ drivers });
-    expect(Field.gossips[0]).toEqual([0, 1]);
-    expect(Field.gossips[1]).toEqual([]);
-    expect(Field.gossips[2]).toEqual([]);
-    expect(Field.gossips[3]).toEqual([]);
-  });
-
-  test("should init gossips based off passed input 2", () => {
-    const input = [[2, 1], [1, 3], [0, 1, 2], [0, 2, 1, 3]];
-    const drivers = CreateDrivers(input);
-    const Field = CreateField({ drivers });
-    expect(Field.gossips[0]).toEqual([2, 3]);
-    expect(Field.gossips[1]).toEqual([1]);
-    expect(Field.gossips[2]).toEqual([0]);
-    expect(Field.gossips[3]).toEqual([]);
-  });
-
   test("should have a exchange method", () => {
     const Field = CreateField({});
     const expected = "function";
@@ -142,5 +122,61 @@ describe("CreateField: exchange", () => {
     Field.exchange();
     expect(drivers[0].gossips).toEqual([0, 1]);
     expect(drivers[1].gossips).toEqual([1, 0]);
+  });
+});
+
+describe("CreateField: tick", () => {
+  let Field;
+  beforeEach(() => {
+    const input = [[0, 1, 2], [2, 1, 0]];
+    const drivers = CreateDrivers(input);
+    Field = CreateField({ drivers });
+  });
+
+  test("should call exchange", () => {
+    const mockExchange = jest.fn();
+    Field.exchange = mockExchange;
+    Field.tick();
+    expect(mockExchange.mock.calls.length).toEqual(1);
+  });
+
+  test("should move all drivers", () => {
+    Field.tick();
+    expect(Field.drivers[0].stop).toEqual(1);
+    expect(Field.drivers[1].stop).toEqual(1);
+  });
+
+  test("should increment count", () => {
+    Field.tick();
+    expect(Field.count).toEqual(1);
+  });
+
+  test("should decrement remaining", () => {
+    Field.tick();
+    expect(Field.remaining).toEqual(479);
+  });
+
+  test("should update lowestKown prop to match new gossips known", () => {
+    Field.tick();
+    Field.tick();
+    expect(Field.lowestKnown).toEqual(2);
+  });
+});
+
+describe("CreateField: run", () => {
+  test("example1 should return 5", () => {
+    const input = [[3, 1, 2, 3], [3, 2, 3, 1], [4, 2, 3, 4, 5]];
+    const drivers = CreateDrivers(input);
+    const Field = CreateField({ drivers });
+    const answer = Field.run();
+    expect(answer).toEqual(5);
+  });
+
+  test("example2 should return never", () => {
+    const input = [[2, 1, 2], [5, 2, 8]];
+    const drivers = CreateDrivers(input);
+    const Field = CreateField({ drivers });
+    const answer = Field.run();
+    expect(answer).toEqual("never");
   });
 });
